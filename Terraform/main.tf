@@ -8,6 +8,12 @@ resource "aws_instance" "staging" {
     Environment = "Staging"
   }
 
+  root_block_device {
+    volume_size = "32"
+    volume_type = "gp3"
+    encrypted = true
+  }
+
   lifecycle {
     ignore_changes = [ ami ]
   }

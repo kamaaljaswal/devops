@@ -8,6 +8,8 @@ resource "aws_instance" "staging" {
     Environment = "Staging"
   }
 
+  vpc_security_group_ids = [ aws_security_group.dev.id ]
+
   root_block_device {
     volume_size = "32"
     volume_type = "gp3"

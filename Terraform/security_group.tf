@@ -44,7 +44,7 @@ resource "aws_security_group" "admin" {
     }
   }
 
-  egress = {
+  egress {
     from_port = 0
     to_port = 0
     protocol = -1

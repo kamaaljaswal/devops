@@ -9,4 +9,10 @@ locals {
       "port":"22"
     }
   }
+  admin_ports={
+    "osama": {
+      "ip":"182.181.20.196/32",
+      "port":"22"
+    }
+  }
 }

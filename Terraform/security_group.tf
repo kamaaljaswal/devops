@@ -26,3 +26,33 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_outbound" {
   cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = "-1" 
 }
+
+resource "aws_security_group" "admin" {
+  name = "Admin security group"
+  description = "Admin security group - Managed by Terraform"
+  
+  vpc_id = aws_default_vpc.default.id
+
+  dynamic "ingress" {
+    for_each = local.admin_ports
+    content {
+      from_port = ingress.value.port
+      to_port = ingress.value.port
+      protocol = "tcp"
+      cidr_blocks = [ ingress.value.ip ]
+      description = ingress.key
+    }
+  }
+
+  egress = {
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
+  }
+
+  tags = {
+    Name = "dev"
+  }
+}

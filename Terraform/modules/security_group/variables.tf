@@ -9,11 +9,6 @@ variable "vpc_id" {
 }
 
 variable "inbound_ips_and_ports" {
-  type = object({
-    name = object({
-      ip = string
-      port = number 
-    })
-  })
+  type = map(map(string))
   description = "List of IPs and Ports for inbound traffic"
 }

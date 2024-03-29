@@ -1,44 +1,19 @@
-resource "aws_instance" "staging" {
-  ami = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
+module "staging" {
+  source = "./modules/ec2"
+  name = "Staging"
   key_name = data.aws_key_pair.osama.key_name
-
-  tags = {
-    Name = "Staging"
-    Environment = "Staging"
-  }
-
-  vpc_security_group_ids = [ aws_security_group.dev.id ]
-
-  root_block_device {
-    volume_size = "32"
-    volume_type = "gp3"
-    encrypted = true
-  }
-
-  lifecycle {
-    ignore_changes = [ ami ]
-  }
+  instance_type = "t2.micro"
+  root_volume_gb = 32
+  security_group_ids_list = [module.dev_security_group.security_group_id]
+  elastic_ip = true
 }
 
-resource "aws_instance" "jenkins" {
-  ami = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
+module "jenkins" {
+  source = "./modules/ec2"
+  name = "Jenkins"
   key_name = data.aws_key_pair.osama.key_name
-
-  root_block_device {
-    volume_size = "32"
-    volume_type = "gp3"
-    encrypted = true
-  }
-
-  vpc_security_group_ids = [ aws_security_group.admin.id ]
-
-  tags = {
-    "Name": "Jenkins"
-  }
-
-  lifecycle {
-    ignore_changes = [ ami ]
-  }
+  instance_type = "t2.micro"
+  root_volume_gb = 32
+  security_group_ids_list = [module.admin_security_group.security_group_id]
+  elastic_ip = true
 }
